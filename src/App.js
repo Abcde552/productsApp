@@ -1,23 +1,49 @@
-import React from 'react'
-import {BrowserRouter, Routes, Route } from "react-router-dom";
-import Curdhome from './Curdhome';
-import Crudcreate from './Crudcreate';
-import Curdupdate from './Curdupdate';
-import Curdread from './Curdread';
+import React, { useContext } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+import Navbars from "./Navbars";
+import Home from "./Home";
+import DetailedView from "./DetailedView";
+import Cart from "./Cart";
+import Products from "./Products";
+import Signup from "./Signup";
+import Login from "./Login";
+import ProtectedRoute from "./Protectedroute";
+import { EcomContext } from "./context";
+// import { EcomProvider } from "./context";
 
 const App = () => {
-  return (
-    
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Curdhome />} />
-          <Route path="/create" element={<Crudcreate />} />
-          <Route path="/read/:id" element={<Curdread />} />
-          <Route path="update/:id" element={<Curdupdate />} />
-        </Routes>
-      </BrowserRouter>
-    
-  );
-}
+  // const login = true
+  const { login } = useContext(EcomContext);
 
-export default App
+  return (
+    <BrowserRouter>
+      {/* <EcomProvider> */}
+      <Navbars />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/Totalproducts" element={<Products />} />
+        <Route path="/product/:id" element={<DetailedView />} />
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute>
+              <Cart />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+export default App;
